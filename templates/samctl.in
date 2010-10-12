@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# XXX - temporary export
+export PYTHONPATH=${buildout:directory}/sam
+start(){
+  ${redis_ctl:output} start
+  ${redisclient_ctl:output} start
+}
+
+stop(){
+  ${redis_ctl:output} stop
+  ${redisclient_ctl:output} stop
+}
+
+case "$1" in
+  start)
+    start;;
+  stop)
+    stop;;
+  restart)
+    start
+    stop;;
+  *)
+  echo "Usage: samctl {start|stop|restart}"
+  exit 1;;
+esac
+exit
+
