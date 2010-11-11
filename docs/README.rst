@@ -1,4 +1,4 @@
-SAM Buildout
+cSAM Buildout
 ============
 
 Arquitetura
@@ -49,7 +49,8 @@ Redis (banco de dados)
 
     Possui suporte a listas e conjuntos. A partir da versão 1.4 ele é capaz de
     guardar hashs. A partir da versão 2.0 tem a funcionalidade de clusters e
-    auto-replicação. Além de um sistema de mensagens baseado em canais.
+    auto-replicação. Além de um sistema de mensagens baseado em canais. A versão
+    atual em uso é a 2.0.
 
     O banco fica completamente na memória, como o memcached, e é salvo
     periodicamente no sistema de arquivos usando a política append-only,
@@ -90,8 +91,21 @@ poder ser utilizadas: set, update e delete.
 Futuro
 ------
 
-Atualizar a versão do Redis (banco de dados) para a 2.0. Isso trará como
-benefícios: maior velocidade, melhor tratamento de dicionário Python pelo banco.
 Recentemente a txredisapi foi incluída como parte do Cyclone. Então o código
 poderia ser reduzido e simplificado se importasse a biblioteca dele.
+
+Consumindo o serviço manualmente (usando Python)
+------------------------------------------------
+
+Com o serviço devidamente inicializado, abrir um terminal Python. Da biblioteca
+"xmlrpclib" importar a classe "Server". Criar uma instância da classe server
+passando o endereço do servidor (e.g. http://test:test@localhost:8888/xmlrpc).
+Agora para guardar dados no SAM é somente chamar o método "set" passando uma
+string, caso contrário o código tentará converter o objeto para string usando a
+função "str". O UID do dado armazenado será retornado.
+Para atualizar o mesmo basta chamar a função "update", passando como parâmetro
+o UID e o novo dado, respectivamente. Será retornado True caso o valor seja atu
+alizado com sucesso.
+Para deletar uma chave, utilizar a função "delete", passando o UID. Caso a seja
+seja deletada com sucesso, True será retornado.
 
