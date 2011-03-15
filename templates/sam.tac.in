@@ -4,7 +4,7 @@
 import txredisapi
 import cyclone.web
 from twisted.application import service, internet
-from nsisam.xmlrpc import XmlrpcHandler
+from nsisam.http import HttpHandler
 from nsisam.auth import Authentication
 from ConfigParser import RawConfigParser
 
@@ -32,7 +32,7 @@ class SAM(cyclone.web.Application):
     
     def __init__(self):
         handlers = [
-            (r"/xmlrpc", XmlrpcHandler),
+            (r"/", HttpHandler),
         ]
       
         settings = {
