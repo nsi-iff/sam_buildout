@@ -13,7 +13,7 @@ class SAMTestCase(unittest.TestCase):
 
     def setUp(self):
         self.uid_list = []
-        self.rest = Restfulie.at('http://localhost:8888/').as_('application/json')
+        self.rest = Restfulie.at('http://test:test@localhost:8888/').as_('application/json')
 
     def testSet(self):
         """Test if the data and uid are correctly"""
@@ -26,7 +26,7 @@ class SAMTestCase(unittest.TestCase):
         expected_data = "SAM TEST"
         self.assertEqual(value.data, expected_data)
         self.assertEqual(value.size, size)
-#        self.assertEqual(value.from_user, from_user)
+        self.assertEqual(value.from_user, from_user)
         self.assertEqual(value.date, today)
         self.assertEqual(self.rest.get({'key':'doesnt exist'}).code, '404')
         self.uid_list.append(uid)
@@ -51,15 +51,15 @@ class SAMTestCase(unittest.TestCase):
         self.assertEquals(result, False)
         self.uid_list.append(uid)
 
-#    def testAuthentication(self):
-#        """ Test if the server is authenticating correctly """
-#        sam_with_non_existing_user = Server("http://nonexisting:userandpass@localhost:8888/xmlrpc")
-#        result = sam_with_non_existing_user.set('foo')
-#        self.assertEquals(result, "Authorization Failed!")
-
-#        sam_with_wrong_password = Server("http://test:wrongpass@localhost:8888/xmlrpc")
-#        result = sam_with_wrong_password.get('foo')
-#        self.assertEquals(result, "Authorization Failed!")
+    # def testAuthentication(self):
+    #     """ Test if the server is authenticating correctly """
+    #     sam_with_non_existing_user = Server("http://nonexisting:userandpass@localhost:8888/xmlrpc")
+    #     result = sam_with_non_existing_user.set('foo')
+    #     self.assertEquals(result, "Authorization Failed!")
+    # 
+    #     sam_with_wrong_password = Server("http://test:wrongpass@localhost:8888/xmlrpc")
+    #     result = sam_with_wrong_password.get('foo')
+    #     self.assertEquals(result, "Authorization Failed!")
 
     def tearDown(self):
         """Delete all keys"""
