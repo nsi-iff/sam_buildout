@@ -1,17 +1,16 @@
 PYTHON=python
+PIP=pip
 
-all: clean redis nsisam buildout run_unit_test
+all: clean restfulie redis buildout run_unit_test
+
 clean:
 	rm -rf .installed.cfg bin eggs web2py
 
-nsisam:
-	@rm -Rf nsi.sam-0.1
-	@rm -rf nsi.sam-0.1.tar.gz
-	wget http://newton.iff.edu.br/pypi/nsi.sam-0.1.tar.gz
-	tar -vzxf nsi.sam-0.1.tar.gz
-	cd nsi.sam-0.1 && ${PYTHON} setup.py install
-	@rm -Rf nsi.sam-0.1
-	@rm -rf nsi.sam-0.1.tar.gz
+restfulie:
+	@rm -rf restfulie
+	git clone git://github.com/caelum/restfulie-py restfulie
+	cd restfulie && ${PYTHON} setup.py install
+	@rm -rf restfulie
 
 redis:
 	@rm -Rf redis-2.0.1
