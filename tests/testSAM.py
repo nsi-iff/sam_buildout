@@ -13,7 +13,7 @@ class SAMTestCase(unittest.TestCase):
 
     def setUp(self):
         self.uid_list = []
-        self.rest = Restfulie.at('http://test:test@localhost:8888/').as_('application/json')
+        self.rest = Restfulie.at('http://localhost:8888/').as_('application/json').auth('test','test')
 
     def testSet(self):
         """Test if the data and uid are correctly"""
