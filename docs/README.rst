@@ -4,28 +4,30 @@ cSAM Buildout
 Arquitetura
 -----------
 
-Como pode ser visto no pacote nsi.sam o sistema consiste em um webservice
-(xmlrpc) hostiado por padrão na porta 8888 na url
-http://usuario:senha@localhost:8888/xmlrpc.
+Como pode ser visto no pacote nsi.sam o sistema consiste em um webservice RESTful
+hostiado por padrão na porta 8888 na url http://localhost:8888/.
 
 O serviço possui autenticação HTTP básica onde os usuários com acesso permitido
-ficam em um banco SQLite. Ele é composto por 3 funções:
+ficam em um banco SQLite e todos os parâmetros devem ser passados no coro da requisição
+formatos como "json". Ele é composto por 3 verbos http:
 
-set
-    É uma função utilizada para guardar qualquer valor dentro do banco de dados
-    e retorna a chave para recuperar o mesmo.
+PUT
+    É o verbo responsável pela adição de chaves no sistema de armazenamento.
+    Ele recebe um parâmetro "value" no corpo da request que corresponderá ao
+    dado que será inserido no banco de dados. Retornará para o usuário uma
+    "key", que é a chave que deverá ser usada para recuperar o valor armazenado.
 
-    Ao setar uma string o serviço prepara um dicionário, com a data da request,
-    o usuário que está fazendo-a, o tamanho dela e a string propriamente dita, e
-    guarda ele como string no banco.
+POST
+    É o verbo responsável pela atualização do valor armazenado em uma determinada chave.
+    Este deve receber dois parâmetros: "key" (chave para o valor) e "value" (valor atualizado).
+    Caso a chave fornecida exista e o valor seja atualizado com sucesso, o servidor retornará
+    um parâmetro "key" confirmando a chave atualizada, caso contráro o servidor apresentará um
+    erro 404 (Key Not Found).
 
-update
-    Muda o valor em uma determinada chave para outro passado como argumento pela
-    função. Detalhe importante: o valor não é o dicionário inteiro! É a string
-    que será guardada dentro dele.
-
-delete
-    Deleta o valor referente a uma chave, junto com ela.
+DELETE
+    Deleta uma chave do sistema de armazenamento. Recebe como parâmetra uma "key" (chave) a ser
+    deletada. Se ela existir e a deleção ocorrer com sucesso, retorna uma chave "deleted" com valor
+    verdadeiro. Se a chave não existir ele simplesmente retorna a mesma chave com valor falso.
 
 
 Bibliotecas
@@ -80,13 +82,6 @@ Rodando os testes
 Se o SAM estiver rodando, é aconselhável pará-lo: *bin/samctl stop* e então
 rodar: *make run_unit_test*.
 
-Consumindo o serviço manualmente (usando Python)
-Com o serviço devidamente iniciado, abrir um terminal Python. Da biblioteca
-*xmlrpclib* importar a classe *Server*.
-Criar uma instância da classe *Server*, passando como parâmetro o endereço do
-serviço (http://usuario:senha@localhost:8080/xmlrpc). Então todas as funções
-poder ser utilizadas: set, update e delete.
-
 
 Futuro
 ------
@@ -94,18 +89,12 @@ Futuro
 Recentemente a txredisapi foi incluída como parte do Cyclone. Então o código
 poderia ser reduzido e simplificado se importasse a biblioteca dele.
 
+
 Consumindo o serviço manualmente (usando Python)
 ------------------------------------------------
 
-Com o serviço devidamente inicializado, abrir um terminal Python. Da biblioteca
-"xmlrpclib" importar a classe "Server". Criar uma instância da classe server
-passando o endereço do servidor (e.g. http://test:test@localhost:8888/xmlrpc).
-Agora para guardar dados no SAM é somente chamar o método "set" passando uma
-string, caso contrário o código tentará converter o objeto para string usando a
-função "str". O UID do dado armazenado será retornado.
-Para atualizar o mesmo basta chamar a função "update", passando como parâmetro
-o UID e o novo dado, respectivamente. Será retornado True caso o valor seja atu
-alizado com sucesso.
-Para deletar uma chave, utilizar a função "delete", passando o UID. Caso a seja
-seja deletada com sucesso, True será retornado.
+Com uma biblioteca qualquer capaz de realizar requisições HTTP basta enviar uma
+requisição usando o verbo desejado e passar os parâmetros necessários em formato
+json no corpo da requisição. Não esquecendo da autenticação http simples.
 
+O resultado será retornando como corpo da resposta da requisição.
