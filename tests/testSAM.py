@@ -51,15 +51,15 @@ class SAMTestCase(unittest.TestCase):
         self.assertEquals(result, False)
         self.uid_list.append(uid)
 
-    # def testAuthentication(self):
-    #     """ Test if the server is authenticating correctly """
-    #     sam_with_non_existing_user = Server("http://nonexisting:userandpass@localhost:8888/xmlrpc")
-    #     result = sam_with_non_existing_user.set('foo')
-    #     self.assertEquals(result, "Authorization Failed!")
-    # 
-    #     sam_with_wrong_password = Server("http://test:wrongpass@localhost:8888/xmlrpc")
-    #     result = sam_with_wrong_password.get('foo')
-    #     self.assertEquals(result, "Authorization Failed!")
+	def testAuthentication(self):
+		""" Test if the server is authenticating correctly """
+		sam_with_non_existing_user = Restfulie.at("http://localhost:8888/").as_("application/json").auth('dont', 'exists')
+		result = sam_with_non_existing_user.put({'value':'test'})
+		self.assertEquals(result.code, 404)
+
+		sam_with_non_existing_user = Restfulie.at("http://localhost:8888/").as_("application/json").auth('test', 'wrongpassword')
+		result = sam_with_non_existing_user.put({'value':'test'})
+		self.assertEquals(result.code, 404)
 
     def tearDown(self):
         """Delete all keys"""
