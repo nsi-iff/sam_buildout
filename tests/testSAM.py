@@ -17,9 +17,9 @@ class SAMTestCase(unittest.TestCase):
 
     def testSet(self):
         """Test if the data and uid are correctly"""
-        uid = self.rest.put({'value':'SAM TEST'}).resource().key
+        uid = self.rest.put(value='SAM TEST').resource().key
         open('/tmp/log.txt', 'w+').write(uid)
-        value = self.rest.get({'key':uid}).resource()
+        value = self.rest.get(key=uid).resource()
         today = datetime.today().strftime('%d/%m/%y %H:%M')
         size = 8
         from_user = "test"
@@ -28,43 +28,43 @@ class SAMTestCase(unittest.TestCase):
         self.assertEqual(value.size, size)
         self.assertEqual(value.from_user, from_user)
         self.assertEqual(value.date, today)
-        self.assertEqual(self.rest.get({'key':'doesnt exist'}).code, '404')
+        self.assertEqual(self.rest.get(key='doesnt exist').code, '404')
         self.uid_list.append(uid)
 
     def testUpdateKeyValue(self):
         """Test if some data is updated correctly"""
-        uid = self.rest.put({'value':'SAM TEST 2'}).resource().key
-        value = self.rest.get({'key':uid}).resource()
+        uid = self.rest.put(value='SAM TEST 2').resource().key
+        value = self.rest.get(key=uid).resource()
         self.assertEquals(value.data, "SAM TEST 2")
-        self.rest.post({'key':uid, 'value':'SAM TEST UPDATE'})
-        updated_value = self.rest.get({'key':uid}).resource()
+        self.rest.post(key=uid, value='SAM TEST UPDATE')
+        updated_value = self.rest.get(key=uid).resource()
         data = updated_value.data
         self.assertEquals(data, 'SAM TEST UPDATE')
         self.uid_list.append(uid)
 
     def testDelete(self):
         """Test if some key is deleted correclty"""
-        uid = self.rest.put({'value':'SAM TEST 2'}).resource().key
-        result = self.rest.delete({"key":uid}).resource().deleted
+        uid = self.rest.put(value='SAM TEST 2').resource().key
+        result = self.rest.delete(key=uid).resource().deleted
         self.assertEquals(result, True)
-        result = self.rest.delete({"key":uid}).resource().deleted
+        result = self.rest.delete(key=uid).resource().deleted
         self.assertEquals(result, False)
         self.uid_list.append(uid)
 
-	def testAuthentication(self):
-		""" Test if the server is authenticating correctly """
-		sam_with_non_existing_user = Restfulie.at("http://localhost:8888/").as_("application/json").auth('dont', 'exists')
-		result = sam_with_non_existing_user.put({'value':'test'})
-		self.assertEquals(result.code, 404)
+    def testAuthentication(self):
+	""" Test if the server is authenticating correctly """
+	sam_with_non_existing_user = Restfulie.at("http://localhost:8888/").as_("application/json").auth('dont', 'exists')
+	result = sam_with_non_existing_user.put(value='test')
+	self.assertEquals(result.code, "401")
 
-		sam_with_non_existing_user = Restfulie.at("http://localhost:8888/").as_("application/json").auth('test', 'wrongpassword')
-		result = sam_with_non_existing_user.put({'value':'test'})
-		self.assertEquals(result.code, 404)
+	sam_with_non_existing_user = Restfulie.at("http://localhost:8888/").as_("application/json").auth('test', 'wrongpassword')
+	result = sam_with_non_existing_user.put(value='test')
+	self.assertEquals(result.code, "401")
 
     def tearDown(self):
         """Delete all keys"""
         for uid in self.uid_list:
-            self.rest.delete({'key':uid})
+            self.rest.delete(key=uid)
 
 if __name__ == "__main__":
   python_path = join(FOLDER_PATH, "..", 'bin', 'python')
