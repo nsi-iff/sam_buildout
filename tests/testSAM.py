@@ -1,5 +1,6 @@
 import unittest
-from xmlrpclib import Server
+from hashlib import sha1
+from json import dumps, loads
 from subprocess import call
 from time import sleep
 from restfulie import Restfulie
@@ -17,13 +18,22 @@ class SAMTestCase(unittest.TestCase):
 
     def testSet(self):
         """Test if the data and uid are correctly"""
-        uid = self.rest.put(value='SAM TEST').resource().key
-        open('/tmp/log.txt', 'w+').write(uid)
+        response = self.rest.put(value='SAM TEST').resource()
+
+        uid = response.key
+        checksum = response.checksum
         value = self.rest.get(key=uid).resource()
         today = datetime.today().strftime('%d/%m/%y %H:%M')
         size = 8
         from_user = "test"
         expected_data = "SAM TEST"
+        expected_dict = {"data":expected_data, "size":size,  "date":today, "from_user":from_user}
+
+        checksum_calculator = sha1()
+        checksum_calculator.update(dumps(expected_dict))
+        expected_checksum = checksum_calculator.hexdigest()
+
+        self.assertEqual(checksum, expected_checksum)
         self.assertEqual(value.data, expected_data)
         self.assertEqual(value.size, size)
         self.assertEqual(value.from_user, from_user)
@@ -52,14 +62,14 @@ class SAMTestCase(unittest.TestCase):
         self.uid_list.append(uid)
 
     def testAuthentication(self):
-	""" Test if the server is authenticating correctly """
-	sam_with_non_existing_user = Restfulie.at("http://localhost:8888/").as_("application/json").auth('dont', 'exists')
-	result = sam_with_non_existing_user.put(value='test')
-	self.assertEquals(result.code, "401")
+        """ Test if the server is authenticating correctly """
+        sam_with_non_existing_user = Restfulie.at("http://localhost:8888/").as_("application/json").auth('dont', 'exists')
+        result = sam_with_non_existing_user.put(value='test')
+        self.assertEquals(result.code, "401")
 
-	sam_with_non_existing_user = Restfulie.at("http://localhost:8888/").as_("application/json").auth('test', 'wrongpassword')
-	result = sam_with_non_existing_user.put(value='test')
-	self.assertEquals(result.code, "401")
+        sam_with_non_existing_user = Restfulie.at("http://localhost:8888/").as_("application/json").auth('test', 'wrongpassword')
+        result = sam_with_non_existing_user.put(value='test')
+        self.assertEquals(result.code, "401")
 
     def tearDown(self):
         """Delete all keys"""
