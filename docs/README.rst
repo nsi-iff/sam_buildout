@@ -1,4 +1,4 @@
-cSAM Buildout
+SAM Buildout
 ============
 
 Arquitetura
@@ -15,14 +15,16 @@ PUT
     É o verbo responsável pela adição de chaves no sistema de armazenamento.
     Ele recebe um parâmetro "value" no corpo da request que corresponderá ao
     dado que será inserido no banco de dados. Retornará para o usuário uma
-    "key", que é a chave que deverá ser usada para recuperar o valor armazenado.
+    "key", que é a chave que deverá ser usada para recuperar o valor armazenado. E
+    uma chave "checksum", que contém o hash sha1 gerado com a representação em string
+    do dicionário que será armazenado no SAM.
 
 POST
     É o verbo responsável pela atualização do valor armazenado em uma determinada chave.
     Este deve receber dois parâmetros: "key" (chave para o valor) e "value" (valor atualizado).
     Caso a chave fornecida exista e o valor seja atualizado com sucesso, o servidor retornará
-    um parâmetro "key" confirmando a chave atualizada, caso contráro o servidor apresentará um
-    erro 404 (Key Not Found).
+    um parâmetro "key" confirmando a chave atualizada e o checksum atualizado para a chave,
+    caso contráro o servidor apresentará um erro 404 (Key Not Found).
 
 DELETE
     Deleta uma chave do sistema de armazenamento. Recebe como parâmetra uma "key" (chave) a ser
