@@ -15,6 +15,7 @@ class SAMTestCase(unittest.TestCase):
     def setUp(self):
         self.uid_list = []
         self.rest = Restfulie.at('http://localhost:8888/').as_('application/json').auth('test','test')
+        self.checksum_calculator = sha1()
 
     def testSet(self):
         """Test if the data and uid are correctly"""
@@ -29,9 +30,8 @@ class SAMTestCase(unittest.TestCase):
         expected_data = "SAM TEST"
         expected_dict = {"data":expected_data, "size":size,  "date":today, "from_user":from_user}
 
-        checksum_calculator = sha1()
-        checksum_calculator.update(dumps(expected_dict))
-        expected_checksum = checksum_calculator.hexdigest()
+        self.checksum_calculator.update(dumps(expected_dict))
+        expected_checksum = self.checksum_calculator.hexdigest()
 
         self.assertEqual(checksum, expected_checksum)
         self.assertEqual(value.data, expected_data)
@@ -43,9 +43,19 @@ class SAMTestCase(unittest.TestCase):
 
     def testUpdateKeyValue(self):
         """Test if some data is updated correctly"""
-        uid = self.rest.put(value='SAM TEST 2').resource().key
-        value = self.rest.get(key=uid).resource()
+        response = self.rest.put(value='SAM TEST 2').resource()
+        uid = response.key
+        checksum = response.checksum
+
+        stored = self.rest.get(key=uid)
+
+        self.checksum_calculator.update(dumps(loads(stored.body)))
+        expected_checksum = self.checksum_calculator.hexdigest()
+
+        value = stored.resource()
         self.assertEquals(value.data, "SAM TEST 2")
+        self.assertEquals(checksum, expected_checksum)
+
         self.rest.post(key=uid, value='SAM TEST UPDATE')
         updated_value = self.rest.get(key=uid).resource()
         data = updated_value.data
