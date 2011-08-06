@@ -1,4 +1,5 @@
 import unittest
+from should_dsl import should, should_not
 from hashlib import sha1
 from json import dumps, loads
 from subprocess import call
@@ -20,10 +21,11 @@ class SAMTestCase(unittest.TestCase):
     def testSet(self):
         """Test if the data and uid are correctly"""
         response = self.rest.put(value='SAM TEST').resource()
-
         uid = response.key
         checksum = response.checksum
-        value = self.rest.get(key=uid).resource()
+
+        actual_dict = loads(self.rest.get(key=uid).body)
+
         today = datetime.today().strftime('%d/%m/%y %H:%M')
         size = 8
         from_user = "test"
@@ -33,12 +35,8 @@ class SAMTestCase(unittest.TestCase):
         self.checksum_calculator.update(dumps(expected_dict))
         expected_checksum = self.checksum_calculator.hexdigest()
 
-        self.assertEqual(checksum, expected_checksum)
-        self.assertEqual(value.data, expected_data)
-        self.assertEqual(value.size, size)
-        self.assertEqual(value.from_user, from_user)
-        self.assertEqual(value.date, today)
-        self.assertEqual(self.rest.get(key='doesnt exist').code, '404')
+        actual_dict |should| equal_to(expected_dict)
+        self.rest.get(key='doesnt exist').code |should| equal_to('404')
         self.uid_list.append(uid)
 
     def testUpdateKeyValue(self):
@@ -67,8 +65,8 @@ class SAMTestCase(unittest.TestCase):
         uid = self.rest.put(value='SAM TEST 2').resource().key
         result = self.rest.delete(key=uid).resource().deleted
         self.assertEquals(result, True)
-        result = self.rest.delete(key=uid).resource().deleted
-        self.assertEquals(result, False)
+        result = self.rest.delete(key=uid)
+        self.assertEquals(result.code, "404")
         self.uid_list.append(uid)
 
     def testAuthentication(self):
