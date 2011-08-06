@@ -1,7 +1,7 @@
 PYTHON=python
 PIP=pip
 
-all: clean restfulie redis buildout run_unit_test
+all: clean restfulie redis buildout should_dsl test
 
 clean:
 	rm -rf .installed.cfg bin eggs web2py
@@ -20,7 +20,7 @@ nsisam:
 	@rm -rf nsi.sam-0.1.tar.gz
 
 restfulie:
-	pip install restfulie
+	${PIP} install restfulie
 
 redis:
 	@rm -Rf redis-2.0.1
@@ -33,7 +33,10 @@ buildout:
 	$(PYTHON) bootstrap.py
 	bin/buildout -vv
 
-run_unit_test:
+should_dsl:
+	${PIP} install should_dsl
+
+test:
 	$(PYTHON) testAssert.py
 	$(PYTHON) tests/testSAM.py
 
