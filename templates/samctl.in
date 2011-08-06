@@ -18,8 +18,8 @@ case "$1" in
   stop)
     stop;;
   restart)
-    start
-    stop;;
+    stop
+    start;;
   *)
   echo "Usage: samctl {start|stop|restart}"
   exit 1;;
