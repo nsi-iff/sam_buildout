@@ -16,7 +16,7 @@ PUT
     Ele recebe um parâmetro "value" no corpo da request que corresponderá ao
     dado que será inserido no banco de dados. Retornará para o usuário uma
     "key", que é a chave que deverá ser usada para recuperar o valor armazenado. E
-    uma chave "checksum", que contém o hash sha1 gerado com a representação em string
+    uma chave "checksum", que contém o hash sha1 gerado com a representação em json
     do dicionário que será armazenado no SAM.
 
 POST
