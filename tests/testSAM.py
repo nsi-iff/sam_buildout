@@ -43,6 +43,7 @@ class SAMTestCase(unittest.TestCase):
         """Test if some data is updated correctly"""
         response = self.rest.put(value='SAM TEST 2').resource()
         uid = response.key
+        self.uid_list.append(uid)
         checksum = response.checksum
 
         stored = self.rest.get(key=uid)
@@ -55,10 +56,19 @@ class SAMTestCase(unittest.TestCase):
         self.assertEquals(checksum, expected_checksum)
 
         self.rest.post(key=uid, value='SAM TEST UPDATE')
+        today = datetime.today().strftime('%d/%m/%y %H:%M')
         updated_value = self.rest.get(key=uid).resource()
         data = updated_value.data
+
+        updated_value.history[0].user |should| equal_to('test')
+        updated_value.history[0].date |should| equal_to(today)
         self.assertEquals(data, 'SAM TEST UPDATE')
-        self.uid_list.append(uid)
+
+        self.rest.post(key=uid, value='SAM TEST SECOND UPDATE')
+        second_updated_value = self.rest.get(key=uid).resource()
+
+        second_updated_value.history[1].user |should| equal_to('test')
+        second_updated_value.history[1].date |should| equal_to(today)
 
     def testDelete(self):
         """Test if some key is deleted correclty"""
