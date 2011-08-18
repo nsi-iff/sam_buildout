@@ -52,8 +52,8 @@ class SAMTestCase(unittest.TestCase):
         expected_checksum = self.checksum_calculator.hexdigest()
 
         value = stored.resource()
-        self.assertEquals(value.data, "SAM TEST 2")
-        self.assertEquals(checksum, expected_checksum)
+        value.data |should| equal_to("SAM TEST 2")
+        checksum |should| equal_to(expected_checksum)
 
         self.rest.post(key=uid, value='SAM TEST UPDATE')
         today = datetime.today().strftime('%d/%m/%y %H:%M')
@@ -62,7 +62,7 @@ class SAMTestCase(unittest.TestCase):
 
         updated_value.history[0].user |should| equal_to('test')
         updated_value.history[0].date |should| equal_to(today)
-        self.assertEquals(data, 'SAM TEST UPDATE')
+        data |should| equal_to('SAM TEST UPDATE')
 
         self.rest.post(key=uid, value='SAM TEST SECOND UPDATE')
         second_updated_value = self.rest.get(key=uid).resource()
@@ -73,10 +73,10 @@ class SAMTestCase(unittest.TestCase):
     def testDelete(self):
         """Test if some key is deleted correclty"""
         uid = self.rest.put(value='SAM TEST 2').resource().key
-        result = self.rest.delete(key=uid).resource().deleted
-        self.assertEquals(result, True)
+        result = self.rest.delete(key=uid).resource()
+        result |should| be_deleted
         result = self.rest.delete(key=uid)
-        self.assertEquals(result.code, "404")
+        result.code |should| equal_to("404")
         self.uid_list.append(uid)
 
     def testAuthentication(self):
