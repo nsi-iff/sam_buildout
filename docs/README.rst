@@ -17,7 +17,8 @@ PUT
     dado que será inserido no banco de dados. Retornará para o usuário uma
     "key", que é a chave que deverá ser usada para recuperar o valor armazenado. E
     uma chave "checksum", que contém o hash sha1 gerado com a representação em json
-    do dicionário que será armazenado no SAM.
+    do dicionário que será armazenado no SAM. Também há uma chave "history" onde ficam
+    armazenados data, hora e o nome do usuário que realizou mudanças no registro.
 
 POST
     É o verbo responsável pela atualização do valor armazenado em uma determinada chave.
