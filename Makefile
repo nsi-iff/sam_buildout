@@ -1,7 +1,10 @@
 PYTHON=python
 PIP=pip
 
-all: clean restfulie redis buildout should_dsl test
+all: clean sys_deps unzip restfulie redis buildout should_dsl nsisam test
+
+unzip:
+	sudo apt-get install unzip -y
 
 clean:
 	rm -rf .installed.cfg bin eggs web2py
@@ -32,6 +35,9 @@ redis:
 buildout:
 	$(PYTHON) bootstrap.py
 	bin/buildout -vv
+
+sys_deps:
+	sudo apt-get install python-setuptools python-dev libxml2-dev libxslt1-dev python-profiler
 
 should_dsl:
 	${PIP} install should_dsl
