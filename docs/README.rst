@@ -83,7 +83,7 @@ Rodando os testes
 -----------------
 
 Se o SAM estiver rodando, é aconselhável pará-lo: *bin/samctl stop* e então
-rodar: *make run_unit_test*.
+rodar: *make test*.
 
 
 Futuro
