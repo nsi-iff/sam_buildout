@@ -39,6 +39,16 @@ buildout:
 sys_deps:
 	sudo apt-get install python-setuptools python-dev libxml2-dev libxslt1-dev python-profiler
 
+funkload:
+	sudo apt-get install python-dev python-setuptools python-webunit python-docutils gnuplot
+	pip install funkload
+
+load_test:
+	cd tests && fl-run-bench testFunkLoad.py SamBench.test_sam
+
+load_test_report:
+	cd tests && fl-build-report --html sam-bench.xml -r funkload_report
+
 should_dsl:
 	${PIP} install should_dsl
 
