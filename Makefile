@@ -44,7 +44,13 @@ funkload:
 	pip install funkload
 
 load_test:
+	bin/samctl stop
+	bin/samctl start
+	bin/add-user.py test test
 	cd tests && fl-run-bench testFunkLoad.py SamBench.test_sam
+	cd tests && fl-build-report --html sam-bench.xml -r funkload_report
+	bin/samctl stop
+	bin/del-user.py test
 
 load_test_report:
 	cd tests && fl-build-report --html sam-bench.xml -r funkload_report
