@@ -1,6 +1,21 @@
 SAM Buildout
 ============
 
+Sistema operacional
+-------------------
+
+Todos os serviços são desenvolvidos sob o sistema operacional Ubuntu Linux 10.04 32 bits e seu funcionamento só
+é garantido em tal sistema operacional.
+
+Dependências do sistema
+-----------------------
+
+Para o funcionamento do serviço, é necessário que os seguintes pacotes estejam instalados no sistema: python-dev, python-setuptools,
+python-webunit, python-docutils, libxml2-dev, libxslt1-dev, python-profiler, unzip. Também é necessário o banco de dados Redis.
+
+Durante a instalação do serviço, ao executar o comando *make*, todas essas dependências serão devidamente instaladas.
+
+
 Arquitetura
 -----------
 
