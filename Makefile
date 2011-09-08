@@ -1,7 +1,7 @@
 PYTHON=python
 PIP=pip
 
-all: clean sys_deps unzip restfulie redis buildout should_dsl nsisam test
+all: clean sys_deps pip_install unzip restfulie redis buildout should_dsl nsisam test
 
 unzip:
 	sudo apt-get install unzip -y
