@@ -37,7 +37,7 @@ buildout:
 	bin/buildout -vv
 
 sys_deps:
-	sudo apt-get install python-setuptools python-dev libxml2-dev libxslt1-dev python-profiler
+	sudo apt-get install python-setuptools python-dev libxml2-dev libxslt1-dev
 
 funkload:
 	sudo apt-get install python-dev python-setuptools python-webunit python-docutils gnuplot
