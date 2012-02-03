@@ -1,3 +1,5 @@
+#encoding: utf-8
+
 import unittest
 from should_dsl import should, should_not
 from hashlib import sha1
@@ -20,17 +22,16 @@ class SAMTestCase(unittest.TestCase):
 
     def testSet(self):
         """Test if the data and uid are correctly"""
-        response = self.rest.put(value='SAM TEST').resource()
+        dados = {u'value':{u'images':[u'1',u'2', u'3']}}
+        response = self.rest.put(value=dados).resource()
         uid = response.key
         checksum = response.checksum
 
         actual_dict = loads(self.rest.get(key=uid).body)
 
-        today = datetime.today().strftime('%d/%m/%y %H:%M')
-        size = 8
-        from_user = "test"
-        expected_data = "SAM TEST"
-        expected_dict = {"data":expected_data, "size":size,  "date":today, "from_user":from_user}
+        today = datetime.today().strftime(u'%d/%m/%y %H:%M')
+        from_user = u"test"
+        expected_dict = {u"data":dados, u"date":today, u"from_user":from_user}
 
         self.checksum_calculator.update(dumps(expected_dict))
         expected_checksum = self.checksum_calculator.hexdigest()
