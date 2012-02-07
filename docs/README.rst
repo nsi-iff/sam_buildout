@@ -4,14 +4,14 @@ SAM Buildout
 Sistema operacional
 -------------------
 
-Todos os serviços são desenvolvidos sob o sistema operacional Ubuntu Linux 10.04 32 bits e seu funcionamento só
+Todos os serviços são desenvolvidos sob o sistema operacional Debian 6 (Squeeze) 64 bits  e seu funcionamento só
 é garantido em tal sistema operacional.
 
 Dependências do sistema
 -----------------------
 
 Para o funcionamento do serviço, é necessário que os seguintes pacotes estejam instalados no sistema: python-dev, python-setuptools,
-python-webunit, python-docutils, libxml2-dev, libxslt1-dev, python-profiler, unzip. Também é necessário o banco de dados Redis.
+python-webunit, python-docutils, libxml2-dev, libxslt1-dev, python-profiler, unzip. Também é necessário o banco de dados noSQL Redis.
 
 Durante a instalação do serviço, ao executar o comando *make*, todas essas dependências serão devidamente instaladas.
 
@@ -24,7 +24,15 @@ hostiado por padrão na porta 8888 na url http://localhost:8888/.
 
 O serviço possui autenticação HTTP básica onde os usuários com acesso permitido
 ficam em um banco SQLite e todos os parâmetros devem ser passados no coro da requisição
-formatos como "json". Ele é composto por 3 verbos http:
+formatos como "json". Ele é composto por 4 verbos http:
+
+GET
+    É o verbo responsável pela recuperação de chaves adicionadas no sistema.
+    Ele recebe um parâmetro "key", que é a chave do dado que foi armazenado
+    pelo verbo PUT. Se a chave existir, ele retornará um dicionário com os metadados
+    criados automaticamente pelo serviço e o dado armazenado anteriormente. Caso a chave
+    não exista, será retornado um erro http 404, informando que a chave não foi encontrada.
+    
 
 PUT
     É o verbo responsável pela adição de chaves no sistema de armazenamento.
