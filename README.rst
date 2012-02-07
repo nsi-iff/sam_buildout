@@ -19,8 +19,8 @@ Durante a instalação do serviço, ao executar o comando ``make``, todas essas 
 Arquitetura
 -----------
 
-Como pode ser visto no pacote nsi.sam o sistema consiste em um webservice RESTful
-hostiado por padrão na porta 8888 na url http://localhost:8888/.
+Como pode ser visto no pacote **nsi.sam** o sistema consiste em um **webservice RESTful**
+hostiado por padrão na **porta 8888** na url **http://localhost/**.
 
 O serviço possui **autenticação HTTP básica** onde os usuários com acesso permitido
 ficam em um banco SQLite e todos os parâmetros devem ser passados no coro da requisição
