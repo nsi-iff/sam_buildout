@@ -30,7 +30,7 @@ GET
     É o verbo responsável pela recuperação de chaves adicionadas no sistema.
     Ele recebe um parâmetro **key**, que é a chave do dado que foi armazenado
     pelo verbo **PUT**. Se a chave existir, ele retornará um dicionário com os metadados
-    criados automaticamente pelo serviço e o dado armazenado anteriormente. Caso a chave
+    criados automaticamente pelo serviço e o dado armazenado anteriormente na chave "data". Caso a chave
     não exista, será retornado um erro **http 404**, informando que a chave não foi encontrada.
     
 
