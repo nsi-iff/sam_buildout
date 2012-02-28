@@ -16,7 +16,7 @@ def get_storage(conf):
     config.read(CONF)
     section_name = 'redis_server_list'
     address_list = [config.get(section_name, opt) for opt in config.options(section_name)]
-    redis_shard = txredisapi.lazyRedisShardingConnection(address_list)
+    redis_shard = txredisapi.lazyShardedConnectionPool(address_list)
     return redis_shard
 
 def get_authenticator(conf):
