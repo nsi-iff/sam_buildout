@@ -1,17 +1,13 @@
 PYTHON=python
 PIP=pip
 
-all: clean sys_deps pip_install unzip restfulie redis buildout should_dsl nsisam funkload test
-
-unzip:
-	sudo apt-get install unzip -y
+all: clean pip_install restfulie redis buildout should_dsl nsisam funkload test
 
 clean:
 	rm -rf .installed.cfg bin eggs web2py
 
 pip_install:
-	sudo apt-get install python-setuptools
-	sudo easy_install pip
+	easy_install pip
 
 nsisam:
 	@rm -Rf nsi.sam-0.1
@@ -37,10 +33,12 @@ buildout:
 	bin/buildout -vv
 
 sys_deps:
+	sudo apt-get install unzip -y
+	sudo apt-get install python-setuptools
 	sudo apt-get install python-setuptools python-dev libxml2-dev libxslt1-dev
+	sudo apt-get install python-dev python-setuptools python-webunit python-docutils gnuplot
 
 funkload:
-	sudo apt-get install python-dev python-setuptools python-webunit python-docutils gnuplot
 	pip install funkload
 
 load_test:
