@@ -35,8 +35,8 @@ buildout:
 sys_deps:
 	sudo apt-get install unzip -y
 	sudo apt-get install python-setuptools
-	sudo apt-get install python-setuptools python-dev libxml2-dev libxslt1-dev
-	sudo apt-get install python-dev python-setuptools python-webunit python-docutils gnuplot
+	sudo apt-get install python-dev libxml2-dev libxslt1-dev
+	sudo apt-get install python-webunit python-docutils gnuplot
 
 funkload:
 	pip install funkload
