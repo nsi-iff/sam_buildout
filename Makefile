@@ -3,9 +3,6 @@ PIP=pip
 
 all: clean sys_deps restfulie redis buildout should_dsl nsisam funkload
 
-unzip:
-	sudo apt-get install unzip -y
-
 clean:
 	rm -rf .installed.cfg bin eggs web2py
 
@@ -32,8 +29,11 @@ buildout:
 	$(PYTHON) bootstrap.py
 	bin/buildout -vv
 
-sys_deps: unzip funkload_deps
-	sudo apt-get install python-setuptools python-dev libxml2-dev libxslt1-dev
+sys_deps:
+	sudo apt-get install unzip -y
+	sudo apt-get install python-setuptools
+	sudo apt-get install python-dev libxml2-dev libxslt1-dev
+	sudo apt-get install python-webunit python-docutils gnuplot
 
 funkload:
 	pip install funkload
