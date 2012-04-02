@@ -1,7 +1,7 @@
 PYTHON=python
 PIP=pip
 
-all: clean sys_deps restfulie redis buildout should_dsl nsisam funkload test
+all: clean sys_deps restfulie redis buildout should_dsl nsisam funkload
 
 unzip:
 	sudo apt-get install unzip -y
