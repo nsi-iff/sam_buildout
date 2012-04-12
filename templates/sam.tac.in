@@ -4,6 +4,8 @@
 import txredisapi
 import cyclone.web
 from twisted.application import service, internet
+from twisted.python.logfile import DailyLogFile
+from twisted.python.log import ILogObserver, FileLogObserver
 from nsisam.http import HttpHandler
 from nsisam.auth import Authentication
 from ConfigParser import RawConfigParser
@@ -36,7 +38,8 @@ class SAM(cyclone.web.Application):
 
         cyclone.web.Application.__init__(self, handlers, **settings)
 
-
+logfile = DailyLogFile("sam.log", "${buildout:log-directory}")
 application = service.Application("SAM")
+application.setComponent(ILogObserver, FileLogObserver(logfile).emit)
 srv = internet.TCPServer(${port}, SAM(), interface='${host}')
 srv.setServiceParent(application)

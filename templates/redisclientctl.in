@@ -1,10 +1,9 @@
 #!/bin/bash
 
-LOG=${buildout:log-directory}/txredis.log
-PID=${buildout:run-directory}/txredis.pid
+PID=${buildout:run-directory}/sam.pid
 TAC=${tac-path}
 start(){
-  ${buildout:bin-directory}/twistd --logfile=$LOG --pidfile=$PID -y $TAC
+  ${buildout:bin-directory}/twistd --pidfile=$PID -y $TAC
 }
 
 stop(){
