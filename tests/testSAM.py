@@ -2,7 +2,7 @@
 
 import unittest
 from should_dsl import should, should_not
-from hashlib import sha1
+from hashlib import sha512
 from json import dumps, loads
 from subprocess import call
 from time import sleep
@@ -18,7 +18,10 @@ class SAMTestCase(unittest.TestCase):
     def setUp(self):
         self.uid_list = []
         self.rest = Restfulie.at('http://localhost:8888/').as_('application/json').auth('test','test')
-        self.checksum_calculator = sha1()
+        self.checksum_calculator = sha512()
+
+    def tearDown(self):
+        del self.checksum_calculator
 
     def testSet(self):
         """Test if the data and uid are correctly"""
