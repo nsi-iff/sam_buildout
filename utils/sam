@@ -1,0 +1,46 @@
+#!/bin/bash
+
+#set -x
+
+FOLDER_PATH="/home/douglas/aos/sam_buildout"
+SAM_OPTS=""
+
+python_path="$FOLDER_PATH/bin"
+samctl_path="$FOLDER_PATH/bin"
+adduser_path="$FOLDER_PATH/bin"
+pid_path="$FOLDER_PATH/run"
+
+. /lib/lsb/init-functions
+
+
+
+case "$1" in
+  start)
+     log_daemon_msg "Starting SAM server..." "sam"
+     sleep 2
+     if start-stop-daemon --start --quiet --oknodo --pidfile $pid_path/sam.pid --exec $samctl_path/samctl start $SAM_OPTS; then
+        log_end_msg 0
+     else
+        log_end_msg 1
+     fi
+     ;;
+
+  stop)
+     log_daemon_msg "Stoping SAM server..." "sam"
+     if start-stop-daemon --stop --quiet --oknodo --pidfile $pid_path/sam.pid --exec $samctl_path/samctl stop; then
+        log_end_msg 0
+     else
+        log_end_msg 1
+     fi
+     ;;
+
+  status)
+     status_of_proc -p $pid_path/sam.pid sam && exit 0 || exit $?
+ 	 ;;
+
+  *)
+	log_action_msg "Usage: /etc/init.d/sam {start|stop|status}"
+	exit 1
+esac
+
+exit 0
