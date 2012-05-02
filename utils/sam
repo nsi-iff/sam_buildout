@@ -35,7 +35,7 @@ case "$1" in
      ;;
 
   status)
-     status_of_proc -p $pid_path/sam.pid sam && exit 0 || exit $?
+     status_of_proc -p $pid_path/sam.pid $samctl_path/samctl sam && exit 0 || exit $?
  	 ;;
 
   *)
