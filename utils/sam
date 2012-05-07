@@ -2,7 +2,7 @@
 
 #set -x
 
-FOLDER_PATH="/home/douglas/aos/sam_buildout"
+FOLDER_PATH="/vagrant/sam_buildout"
 SAM_OPTS=""
 
 python_path="$FOLDER_PATH/bin"
@@ -27,7 +27,7 @@ case "$1" in
 
   stop)
      log_daemon_msg "Stoping SAM server..." "sam"
-     if start-stop-daemon --stop --quiet --oknodo --pidfile $pid_path/sam.pid --exec $samctl_path/samctl stop; then
+     if start-stop-daemon --stop --quiet --oknodo --pidfile $pid_path/sam.pid; then
         log_end_msg 0
      else
         log_end_msg 1
