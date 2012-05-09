@@ -75,6 +75,9 @@ def check_response_for_common_errors(response, default_error):
         elif response.code == '404':
             print "SAM couldn't find the desired key."
             exit(0)
+        elif response.code == '500':
+            print "SAM had an strange internal error while processing your request."
+            exit(0)
         else:
             print default_error
             exit(0)
