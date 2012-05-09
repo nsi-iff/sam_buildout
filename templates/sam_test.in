@@ -1,0 +1,85 @@
+#!${buildout:bin-directory}/python
+
+import argparse
+from json import loads
+
+from restfulie import Restfulie
+from should_dsl import should, should_not
+
+def get_args():
+    parser = argparse.ArgumentParser(description='Process some integers.')
+    parser.add_argument('host', type=str, help='the host of the desired SAM.')
+    parser.add_argument('port', type=str, help='the port of the desired SAM.')
+    parser.add_argument('user', type=str, help='the user of the desired SAM.')
+    parser.add_argument('password', type=str, help='the password of the desired SAM.')
+    return parser.parse_args()
+
+def test_sam(host, port, user, password):
+    url = 'http://%s:%s/' % (host, port)
+    print "Testing sam in the url: %s" % url
+
+    sam = Restfulie.at(url).as_('application/json').auth(user, password)
+
+    # testing put and delete methods
+    print "Testing 'put' method..."
+    try:
+        response = sam.put(value='testing')
+        check_response_for_common_errors(response, "Failed to store values in SAM.")
+        key = loads(response.body)['key']
+    except Exception:
+        print "Couldn't connect to SAM."
+        exit(0)
+    else:
+        print "Testing 'delete' method..."
+        try:
+            response = sam.delete(key=key)
+            check_response_for_common_errors(response, "Failed to delete values in SAM.")
+        except Exception:
+            exit(0)
+            print "Couldn't connect to SAM."
+
+    # testing post method
+    print "Testing 'post' method..."
+    try:
+        response = sam.put(value='testing')
+        key = loads(response.body)['key']
+        new_response = sam.post(value='new testing', key=key)
+        check_response_for_common_errors(response, "Failed to update values in SAM.")
+        sam.delete(key=key)
+    except Exception:
+        print "Couldn't connect to SAM."
+        exit(0)
+
+    # testing get method
+    print "Testing 'get' method..."
+    try:
+        response = sam.put(value='testing')
+        key = loads(response.body)['key']
+        response = sam.get(key=key)
+        check_response_for_common_errors(response, "Failed to get values from SAM.")
+        sam.delete(key=key)
+    except Exception:
+        print "Couldn't connect to SAM."
+        exit(0)
+
+    print "Ok!"
+
+def check_response_for_common_errors(response, default_error):
+    if not response.code == '200':
+        if response.code == '401':
+            print "Authencation invalid."
+            exit(0)
+        elif response.code == '400':
+            print "SAM couldn't understand the HTTP request."
+            exit(0)
+        elif response.code == '404':
+            print "SAM couldn't find the desired key."
+            exit(0)
+        else:
+            print default_error
+            exit(0)
+
+
+if __name__ == '__main__':
+    args = get_args()
+    test_sam(args.host, args.port, args.user, args.password)
