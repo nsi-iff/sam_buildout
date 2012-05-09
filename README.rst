@@ -32,7 +32,7 @@ GET
     pelo verbo **PUT**. Se a chave existir, ele retornará um dicionário com os metadados
     criados automaticamente pelo serviço e o dado armazenado anteriormente na chave "data". Caso a chave
     não exista, será retornado um erro **http 404**, informando que a chave não foi encontrada.
-    
+
 
 PUT
     É o verbo responsável pela adição de chaves no sistema de armazenamento.
@@ -105,8 +105,11 @@ Para adicionar usuário que terão permissão de acesso ao serviço utilizar:
 Rodando os testes
 -----------------
 
-Se o SAM estiver rodando, é aconselhável pará-lo: ``bin/samctl stop`` e então
-rodar: ``make test``.
+Para rodar os testes com o serviço parado, basta rodar: ``make test``.
+Caso o serviço estejam rodando e não for interessante pará-lo para testá-lo,
+basta utilizar o exetucável disponível em ``utils/sam_test``. Ele recebe como parâmetro,
+em ordem, host, porta, usuário e senha do SAM que será testado e realiza **testes básicos**
+nele.
 
 
 Futuro
