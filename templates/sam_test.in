@@ -17,6 +17,7 @@ def get_args():
 def test_sam(host, port, user, password):
     url = 'http://%s:%s/' % (host, port)
     print "Testing sam in the url: %s" % url
+    print "With user/password: %s/%s" % (user, password)
 
     sam = Restfulie.at(url).as_('application/json').auth(user, password)
 
