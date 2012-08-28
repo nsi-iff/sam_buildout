@@ -12,6 +12,7 @@ from ConfigParser import RawConfigParser
 
 CONF = '${conf-path}'
 DB_FILE = '${db-file}'
+FILE_PATH = '${file-path}'
 
 def get_storage(conf):
     config = RawConfigParser()
@@ -29,14 +30,16 @@ class SAM(cyclone.web.Application):
     def __init__(self):
         handlers = [
             (r"/", HttpHandler),
+            # (r"/file/(.+)", FileHandler),
         ]
 
         settings = {
             "db": get_storage(CONF),
             "auth": get_authenticator(CONF),
+            "file_path": FILE_PATH,
         }
 
-        cyclone.web.Application.__init__(self, handlers, **settings)
+        cyclone.web.Application.__init__(self, handlers, debug=True, **settings)
 
 logfile = DailyLogFile("sam.log", "${buildout:log-directory}")
 application = service.Application("SAM")
