@@ -6,7 +6,7 @@ import cyclone.web
 from twisted.application import service, internet
 from twisted.python.logfile import DailyLogFile
 from twisted.python.log import ILogObserver, FileLogObserver
-from nsisam.http import HttpHandler
+from nsisam.http import HttpHandler, FileHandler
 from nsisam.auth import Authentication
 from ConfigParser import RawConfigParser
 
@@ -30,7 +30,7 @@ class SAM(cyclone.web.Application):
     def __init__(self):
         handlers = [
             (r"/", HttpHandler),
-            # (r"/file/(.+)", FileHandler),
+            (r"/file/(.+)", FileHandler),
         ]
 
         settings = {
