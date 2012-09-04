@@ -43,6 +43,14 @@ class SAMTestCase(unittest.TestCase):
         self.rest.get(key='doesnt exist').code |should| equal_to('404')
         self.uid_list.append(uid)
 
+    def testSetWithExpire(self):
+        dados = {'test':'ok'}
+        response = self.rest.put(value=dados, expire=2).resource()
+        uid = response.key
+        sleep(3)
+        response_code = self.rest.get(key=uid).code
+        response_code |should| equal_to('404')
+
     def testUpdateKeyValue(self):
         """Test if some data is updated correctly"""
         response = self.rest.put(value='SAM TEST 2').resource()
