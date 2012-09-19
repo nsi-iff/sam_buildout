@@ -1,0 +1,5 @@
+## Broker settings.
+BROKER_URL = "amqp://${celery_config:user}:${celery_config:password}@${celery_config:host}:${celery_config:port}/${celery_config:vhost}"
+
+## List of modules to import when celery starts.
+CELERY_IMPORTS = ("${celery_config:tasks}", )
