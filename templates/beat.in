@@ -1,0 +1,25 @@
+#!/bin/bash
+
+export PYTHONPATH=${buildout:directory}/sam
+start(){
+  ${buildout:directory}/bin/celery beat --logfile=${buildout:directory}/log/beat.log --pidfile=${buildout:directory}/run/beat.pid --detach
+}
+
+stop(){
+  kill `cat ${buildout:directory}/run/beat.pid`
+}
+
+case "$1" in
+  start)
+    start;;
+  stop)
+    stop;;
+  restart)
+    stop
+    start;;
+  *)
+  echo "Usage: samctl {start|stop|restart}"
+  exit 1;;
+esac
+exit
+

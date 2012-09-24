@@ -1,0 +1,25 @@
+#!${buildout:bin-directory}/${start_worker:interpreter}
+
+from os.path import dirname, abspath, join
+ROOT = abspath(dirname(__file__))
+ETC = join(ROOT, '..', 'etc')
+sys.path.append(ETC)
+
+from subprocess import call
+from argparse import ArgumentParser
+
+
+
+def get_args():
+    parser = ArgumentParser(description='Start Celery workers.')
+    parser.add_argument('-name', dest='name', required=True, type=str,
+                        help='A name for the worker.')
+    return parser.parse_args()
+
+def start_worker():
+    args = get_args()
+    call("%s/celeryd --pidfile=%s --logfile=%s -Q ${sam_tac:task_queue} &" % (ROOT, join(ROOT, '..', 'run', args.name+'.pid'),
+                                                    join(ROOT, '..', 'log', args.name+'.log')), shell=True)
+
+if __name__ == '__main__':
+    start_worker()

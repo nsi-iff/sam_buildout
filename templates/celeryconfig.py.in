@@ -1,5 +1,20 @@
+from celery.schedules import crontab
+from datetime import timedelta
+
 ## Broker settings.
 BROKER_URL = "amqp://${celery_config:user}:${celery_config:password}@${celery_config:host}:${celery_config:port}/${celery_config:vhost}"
 
 ## List of modules to import when celery starts.
-CELERY_IMPORTS = ("${celery_config:tasks}", )
+CELERY_IMPORTS = ("${celery_config:tasks}")
+
+CELERY_ROUTES = {'nsisam.tasks.clean_files': {'queue': 'sam'}}
+
+CELERYBEAT_SCHEDULE = {
+    'every-day-at-midnight': {
+        'task': 'nsisam.tasks.clean_files',
+        # 'schedule': crontab(minute=0, hour=0),
+        'schedule': timedelta(seconds=30),
+        'args': ('${sam_tac:file-path}', '${sam_tac:host}', '${sam_tac:port}',
+                 '${celery_config:sam_user}', '${celery_config:sam_password}')
+    },
+}

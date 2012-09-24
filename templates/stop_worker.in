@@ -1,0 +1,28 @@
+#!${buildout:bin-directory}/${stop_worker:interpreter}
+
+from os.path import dirname, abspath, join
+ROOT = abspath(dirname(__file__))
+ETC = join(ROOT, '..', 'etc')
+sys.path.append(ETC)
+
+from subprocess import call
+from sys import argv
+
+
+def kill_pid(pid):
+    call("kill -s TERM %s" % pid, shell=True)
+
+def get_pid(pidfile):
+    return open(join(ROOT, '..', 'run', pidfile+'.pid')).read()
+
+
+if __name__ == '__main__':
+    if not len(argv)  == 2:
+        print "Usage: kill_worker <worker_name_used_in_start_worker_script>"
+    else:
+        path_to_pidfile = argv[1]
+        pid = get_pid(path_to_pidfile)
+        print "Killing the proccess with pid %s" % pid
+        kill_pid(pid)
+        print "Proccess killed. Please mind it'll finish the last task before " + \
+              " itself shutdown."
