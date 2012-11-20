@@ -22,9 +22,9 @@ def test_sam(host, port, user, password):
     sam = Restfulie.at(url).as_('application/json').auth(user, password)
 
     # testing put and delete methods
-    print "Testing 'put' method..."
+    print "Testing 'post' method..."
     try:
-        response = sam.put(value='testing')
+        response = sam.post(value='testing')
         check_response_for_common_errors(response, "Failed to store values in SAM.")
         key = loads(response.body)['key']
     except Exception:
@@ -40,11 +40,11 @@ def test_sam(host, port, user, password):
             print "Couldn't connect to SAM."
 
     # testing post method
-    print "Testing 'post' method..."
+    print "Testing 'put' method..."
     try:
-        response = sam.put(value='testing')
+        response = sam.post(value='testing')
         key = loads(response.body)['key']
-        new_response = sam.post(value='new testing', key=key)
+        new_response = sam.put(value='new testing', key=key)
         check_response_for_common_errors(response, "Failed to update values in SAM.")
         sam.delete(key=key)
     except Exception:
@@ -54,7 +54,7 @@ def test_sam(host, port, user, password):
     # testing get method
     print "Testing 'get' method..."
     try:
-        response = sam.put(value='testing')
+        response = sam.post(value='testing')
         key = loads(response.body)['key']
         response = sam.get(key=key)
         check_response_for_common_errors(response, "Failed to get values from SAM.")
