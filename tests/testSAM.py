@@ -26,7 +26,7 @@ class SAMTestCase(unittest.TestCase):
     def testSet(self):
         """Test if the data and uid are correctly"""
         dados = {u'value':{u'images':[u'1',u'2', u'3']}}
-        response = self.rest.put(value=dados).resource()
+        response = self.rest.post(value=dados).resource()
         uid = response.key
         checksum = response.checksum
 
@@ -45,7 +45,7 @@ class SAMTestCase(unittest.TestCase):
 
     def testSetWithExpire(self):
         dados = {'test':'ok'}
-        response = self.rest.put(value=dados, expire=2).resource()
+        response = self.rest.post(value=dados, expire=2).resource()
         uid = response.key
         sleep(3)
         response_code = self.rest.get(key=uid).code
@@ -53,7 +53,7 @@ class SAMTestCase(unittest.TestCase):
 
     def testUpdateKeyValue(self):
         """Test if some data is updated correctly"""
-        response = self.rest.put(value='SAM TEST 2').resource()
+        response = self.rest.post(value='SAM TEST 2').resource()
         uid = response.key
         self.uid_list.append(uid)
         checksum = response.checksum
@@ -67,7 +67,7 @@ class SAMTestCase(unittest.TestCase):
         value.data |should| equal_to("SAM TEST 2")
         checksum |should| equal_to(expected_checksum)
 
-        self.rest.post(key=uid, value='SAM TEST UPDATE')
+        self.rest.put(key=uid, value='SAM TEST UPDATE')
         today = datetime.today().strftime('%d/%m/%y %H:%M')
         updated_value = self.rest.get(key=uid).resource()
         data = updated_value.data
@@ -76,7 +76,7 @@ class SAMTestCase(unittest.TestCase):
         updated_value.history[0].date |should| equal_to(today)
         data |should| equal_to('SAM TEST UPDATE')
 
-        self.rest.post(key=uid, value='SAM TEST SECOND UPDATE')
+        self.rest.put(key=uid, value='SAM TEST SECOND UPDATE')
         second_updated_value = self.rest.get(key=uid).resource()
 
         second_updated_value.history[1].user |should| equal_to('test')
@@ -84,7 +84,7 @@ class SAMTestCase(unittest.TestCase):
 
     def testDelete(self):
         """Test if some key is deleted correclty"""
-        uid = self.rest.put(value='SAM TEST 2').resource().key
+        uid = self.rest.post(value='SAM TEST 2').resource().key
         result = self.rest.delete(key=uid).resource()
         result |should| be_deleted
         result = self.rest.delete(key=uid)
@@ -94,11 +94,11 @@ class SAMTestCase(unittest.TestCase):
     def testAuthentication(self):
         """ Test if the server is authenticating correctly """
         sam_with_non_existing_user = Restfulie.at("http://localhost:8888/").as_("application/json").auth('dont', 'exists')
-        result = sam_with_non_existing_user.put(value='test')
+        result = sam_with_non_existing_user.post(value='test')
         self.assertEquals(result.code, "401")
 
         sam_with_non_existing_user = Restfulie.at("http://localhost:8888/").as_("application/json").auth('test', 'wrongpassword')
-        result = sam_with_non_existing_user.put(value='test')
+        result = sam_with_non_existing_user.post(value='test')
         self.assertEquals(result.code, "401")
 
     def tearDown(self):
