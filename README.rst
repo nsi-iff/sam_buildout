@@ -10,8 +10,9 @@ Todos os serviços são desenvolvidos sob o sistema operacional **Debian 6 (Sque
 Dependências do sistema
 -----------------------
 
-Para o funcionamento do serviço, é necessário que os seguintes pacotes estejam instalados no sistema: ``python-dev, python-setuptools,
-python-webunit, python-docutils, libxml2-dev, libxslt1-dev, python-profiler, unzip``.
+Para o funcionamento do serviço, é necessário que os seguintes pacotes estejam instalados
+no sistema: ``python-dev, python-setuptools, python-webunit, python-docutils, libxml2-dev, libxslt1-dev,
+python-profiler, unzip``.
 
 Durante a instalação do serviço, ao executar o comando ``make``, todas essas dependências serão devidamente instaladas.
 
@@ -34,7 +35,7 @@ GET
     não exista, será retornado um erro **http 404**, informando que a chave não foi encontrada.
 
 
-PUT
+POST
     É o verbo responsável pela adição de chaves no sistema de armazenamento.
     Ele recebe um parâmetro **value** no corpo da request que corresponderá ao
     dado que será inserido no banco de dados. Retornará para o usuário uma
@@ -43,7 +44,7 @@ PUT
     do dicionário** que será recuperado ao usar o verbo **GET**. Também há uma chave **history** onde ficam
     armazenados data, hora e o nome do usuário que realizou mudanças no registro.
 
-POST
+PUT
     É o verbo responsável pela atualização do valor armazenado em uma determinada chave.
     Este deve receber dois parâmetros: **key** (chave para o valor) e **value** (valor atualizado).
     Caso a chave fornecida exista e o valor seja atualizado com sucesso, o servidor retornará
@@ -54,6 +55,17 @@ DELETE
     Deleta uma chave do sistema de armazenamento. Recebe como parâmetra uma **key** (chave) a ser
     deletada. Se ela existir e a deleção ocorrer com sucesso, retorna uma chave **deleted** com valor
     verdadeiro. Se a chave não existir ele simplesmente retorna a mesma chave com valor falso.
+
+
+Armazenamento específico de arquivos
+------------------------------------
+
+O serviço tratará como arquivo os registros que possuírem estrutura de dicionario com as chaves
+"file" e "filename". O conteúdo da chave "file" (o arquivo propriamente dito) será salvo no sistema
+de arquivos e seu **hash sha1** será calculado e armazenado no banco de dados, dentro da chave "checksum".
+
+É possível acessar o conteúdo da chave "file" através do navegador, pela url http://usuario:senha@localhost:8888/file/chave,
+onde "chave" corresponde à chave onde o conteúdo foi armazenado.
 
 
 Bibliotecas
@@ -110,13 +122,6 @@ Caso o serviço estejam rodando e não for interessante pará-lo para testá-lo,
 basta utilizar o exetucável disponível em ``utils/sam_test``. Ele recebe como parâmetro,
 em ordem, host, porta, usuário e senha do SAM que será testado e realiza **testes básicos**
 nele.
-
-
-Futuro
-------
-
-Recentemente a **txredisapi** foi incluída como parte do Cyclone. Então o código
-poderia ser reduzido e simplificado se importasse a biblioteca dele.
 
 
 Consumindo o serviço manualmente (usando Python)
