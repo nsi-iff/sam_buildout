@@ -7,13 +7,7 @@ clean:
 	rm -rf .installed.cfg bin eggs web2py
 
 nsisam:
-	@rm -Rf nsi.sam-0.2.2
-	@rm -rf nsi.sam-0.2.2.tar.gz
-	wget http://newton.iff.edu.br/pypi/nsi.sam-0.2.2.tar.gz
-	tar -vzxf nsi.sam-0.2.2.tar.gz
-	cd nsi.sam-0.2.2 && ${PYTHON} setup.py install
-	@rm -Rf nsi.sam-0.2.2
-	@rm -rf nsi.sam-0.2.2.tar.gz
+	pip install https://github.com/nsi-iff/nsi.sam/zipball/master
 
 restfulie:
 	${PIP} install restfulie
