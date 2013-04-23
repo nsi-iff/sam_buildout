@@ -24,6 +24,8 @@ buildout:
 	bin/buildout -vv
 
 sys_deps:
+	sudo apt-get install libfile-mimeinfo-perl
+	sudo update-mime-database /usr/local/share/mim
 	sudo apt-get install unzip -y
 	sudo apt-get install python-setuptools
 	sudo apt-get install python-dev libxml2-dev libxslt1-dev
