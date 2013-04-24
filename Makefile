@@ -24,18 +24,18 @@ buildout:
 	bin/buildout -vv
 
 sys_deps:
-	sudo apt-get install libfile-mimeinfo-perl
-	sudo update-mime-database /usr/local/share/mim
+	sudo apt-get install libfile-mimeinfo-perl -y
+	sudo update-mime-database /usr/share/mime
 	sudo apt-get install unzip -y
-	sudo apt-get install python-setuptools
-	sudo apt-get install python-dev libxml2-dev libxslt1-dev
-	sudo apt-get install python-webunit python-docutils gnuplot
+	sudo apt-get install python-setuptools -y
+	sudo apt-get install python-dev libxml2-dev libxslt1-dev -y
+	sudo apt-get install python-webunit python-docutils gnuplot -y
 
 funkload:
 	pip install funkload
 
 funkload_deps:
-	sudo apt-get install python-dev python-setuptools python-webunit python-docutils gnuplot
+	sudo apt-get install python-dev python-setuptools python-webunit python-docutils gnuplot -y
 
 load_test:
 	bin/samctl start
