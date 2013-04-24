@@ -3,7 +3,7 @@
 from nsisam.auth import Authentication
 import sys
 
-FILE = '${buildout:db}'
+FILE = '${sam_tac:db-file}'
 
 def main(user, passwd):
     auth = Authentication(FILE)
